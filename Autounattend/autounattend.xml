@@ -43,7 +43,16 @@
             </DiskConfiguration>
             <ImageInstall>
                 <OSImage>
-                    <WillShowUI>OnError</WillShowUI>
+                    <InstallFrom>
+                    <MetaData wcm:action="add">
+                        <Key>/IMAGE/INDEX</Key>
+                        <Value>3</Value>
+                    </MetaData>
+                    </InstallFrom>
+                    <InstallTo>
+                        <DiskID>0</DiskID>
+                        <PartitionID>3</PartitionID>
+                    </InstallTo>
                 </OSImage>
             </ImageInstall>
             <UserData>
