@@ -1,7 +1,9 @@
 # Script to control the execution of the AD environment creation scripts
 # Created 03 OCT 22 | Gnome787
 
-# Variables
+# Imports
+Import-Module H:\MakeADEnv\Additionals\New-IsoFile.ps1
+
 
 # Create a credential object
 $Password = ConvertTo-SecureString "Password1" -AsPlainText -Force
@@ -37,9 +39,12 @@ function Wait-ForPS {
     )
 
     Write-Host "Waiting for" $VMName "to respond to PS remoting" -ForegroundColor Cyan
-    while ((icm -VMName $VMName -Credential $Creds {“Test”} -ea SilentlyContinue) -ne “Test”) {Sleep -Seconds 1}
+    while ((icm -VMName $VMName -Credential $Creds {"Test"} -ea SilentlyContinue) -ne "Test") {Sleep -Seconds 1}
     Write-Host $VMName "is responding to PS remoting...Continuing" -ForegroundColor Cyan 
 }
+
+# Create auto ISO
+H:\MakeADEnv\Additionals\nokeyprompt.ps1
 
 # Run the script that makes the VMs
 H:\MakeADEnv\1VMs\makevms.ps1
@@ -48,7 +53,7 @@ H:\MakeADEnv\1VMs\makevms.ps1
 Start-Sleep -Seconds 10
 
 # Start the DC
-Start-VM -Name "DC1"
+#Start-VM -Name "DC1"
 Write-Host "DC1 is running" -ForegroundColor Black -BackgroundColor Green
 
 # Continue when Windows install has completed
@@ -60,12 +65,6 @@ Write-Host "`r`nPre AD setup is beginning" -ForegroundColor Cyan
 
 # Perform pre AD config
 Invoke-Command -VMName "DC1" -FilePath H:\MakeADEnv\2DC1\pread.ps1 -Credential $Cred
-
-# Sleep until server restarts
-Start-Sleep -Seconds 10
-
-# Install AD
-Invoke-Command -VMName "DC1" -FilePath H:\MakeADEnv\2DC1\installad.ps1 -Credential $Cred
 
 Write-Host "Finished installing AD DS Forest" -ForegroundColor Black -BackgroundColor Yellow
 
@@ -91,7 +90,7 @@ Invoke-Command -VMName "DC1" -FilePath H:\MakeADEnv\2DC1\adenv.ps1 -Credential $
 Write-Host "Moving on to DHCP setup" -ForegroundColor Cyan
 
 # Setup the DHCP server
-Start-VM -Name "DHCP"
+#Start-VM -Name "DHCP"
 Write-Host "DHCP server is running" -ForegroundColor Black -BackgroundColor Green
 
 # Continue when Windows install has completed
@@ -114,7 +113,7 @@ Write-Host "Finished setting up DHCP" -ForegroundColor Black -BackgroundColor Ye
 Write-Host "Moving on to FSVR setup" -ForegroundColor Cyan
 
 # Setup the File Server
-Start-VM -Name "FSVR1"
+#Start-VM -Name "FSVR1"
 Write-Host "FSVR1 is running" -ForegroundColor Black -BackgroundColor Green
 
 # Continue when Windows install has completed
@@ -145,7 +144,7 @@ Write-Host "GPO implemented" -ForegroundColor Black -BackgroundColor Yellow
 Write-Host "Moving on to CLI1" -ForegroundColor Cyan
 
 # Setup the Client
-Start-VM -Name "CLI1"
+#Start-VM -Name "CLI1"
 Write-Host "CLI1 is running" -ForegroundColor Black -BackgroundColor Green
 
 # Continue when Windows install has completed
@@ -186,7 +185,7 @@ function Add-Users {
     Wait-ForPS -VMName "DC1" -Creds $DomainCred
 
     # Run the add users script on the DC
-    Invoke-Command -VMName "DC1" -Credential $DomainCred -FilePath H:\MakeADEnv\6Extras\userconfig.csv
+    Invoke-Command -VMName "DC1" -Credential $DomainCred -FilePath H:\MakeADEnv\6Extras\addusers.ps1
 }
 
 function Add-Machine {

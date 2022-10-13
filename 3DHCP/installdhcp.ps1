@@ -39,7 +39,6 @@ $DomainCred = New-Object System.Management.Automation.PSCredential ("xyz\Adminis
 # Join computer to the domain
 $domainparams = @{
 	DomainName = "xyz.local"
-	NewName = "DHCP"
 	OUPath = "OU=Servers,OU=Devices,OU=XYZ,DC=xyz,DC=local"
 	Credential = $DomainCred
 	Force = $true

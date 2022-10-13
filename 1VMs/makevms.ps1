@@ -1,6 +1,9 @@
 # Powershell script to create a virtual machine in Hyper-V
 # Created by Gnome787  | 22 SEP 22
 
+# Import New-IsoFile
+Import-Module H:\MakeADEnv\Additionals\New-IsoFile.ps1
+
 # 1 MB in B (Binary)
 $1BM = 1048576
 # 1 GB in B (Binary)
@@ -60,12 +63,46 @@ foreach($VM in $VMs){
             $DataSize = 120 * $1BG
             $DataVHDPath = [string]$VM.newvhdpath + $VMName + "\" + $VMName + "data.vhdx"
             # Create the drive
-            New-VHD -Path $DataVHDPath -SizeBytes $DataSize
+            New-VHD -Path $DataVHDPath -SizeBytes $DataSize | Out-Null
             # Add the drive
             Add-VMHardDiskDrive -VMName $VMName -Path $DataVHDPath | Out-Null
         }
 
         # Print message if VM was created & started
         Write-Host "A VM with the name $VMName was created." -ForegroundColor Cyan
+
+        if($ISOPath -eq "Win10_21H2_EnglishInternational_x64.iso"){
+            Write-Host "Client"
+        }
+        else{
+            # Variables
+            $Unattendxml = "H:\MakeADEnv\Autounattend\autounattend.xml"
+            $Unattendiso = "H:\VMs\$VMName\autounattend.iso"
+            $VMPath = "H:\VMs\$VMName"
+            $UnattendPath = "$VMPath\Autounattend\autounattend.xml"
+
+            Write-Host "Creating autounattend iso for $VMName" -ForegroundColor Cyan
+
+            # Copy autounattend to VM folder
+            New-Item -ItemType Directory "$VMPath\Autounattend\" | Out-Null
+            Copy-Item -Path $Unattendxml -Destination "$VMPath\Autounattend\autounattend.xml"
+
+            # Change computer name in the unattend file for each vm
+            #$XML = Get-Content "$VMPath\Autounattend\autounattend.xml"
+            #$XML.replace("SetNameHere", $VMName) | Out-File $UnattendPath
+            (Get-Content $UnattendPath).replace("SetNameHere", $VMName) | Set-Content $UnattendPath | Out-Null
+    
+            New-IsoFile -source $UnattendPath -destination $Unattendiso | Out-Null
+            Add-VMDvdDrive -VMName $VMName -Path $Unattendiso
+
+            Write-Host "Autounattend iso file added to $VMName" -ForegroundColor Cyan
+
+            # Remove unattend folder
+            Remove-Item -Path "$VMPath\Autounattend\" -Recurse
+
+            Write-Host "Autounattend cleanup completed" -ForegroundColor Cyan
+
+            Start-VM $VMName
+        }
     }
 }

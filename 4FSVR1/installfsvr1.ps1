@@ -36,12 +36,11 @@ $DomainCred = New-Object System.Management.Automation.PSCredential ("xyz\Adminis
 
 Start-Sleep -Seconds 5
 
-Write-Host "Renaming server to FSVR1 and joining server to the domain" -ForegroundColor Cyan
+Write-Host "Joining server to the domain" -ForegroundColor Cyan
 
 # Join computer to the domain
 $domainparams = @{
 	DomainName = "xyz.local"
-	NewName = "FSVR1"
 	OUPath = "OU=Servers,OU=Devices,OU=XYZ,DC=xyz,DC=local"
 	Credential = $DomainCred
 	Force = $true

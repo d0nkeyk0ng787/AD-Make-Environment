@@ -34,7 +34,7 @@ Add-DhcpServerInDC -Dnsname $Hostname | Out-Null
 Write-Host "DHCP server has been authorised in the DC" -ForegroundColor Cyan
 
 # Notify the server that post install is complete
-Set-ItemProperty â€“Path registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\ServerManager\Roles\12 â€“Name ConfigurationState â€“Value 2 | Out-Null
+Set-ItemProperty –Path registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\ServerManager\Roles\12 –Name ConfigurationState –Value 2 | Out-Null
 
 # Create internal scope
 Add-DhcpServerv4Scope -Name $Scope -StartRange $Start -EndRange $End -SubnetMask $Sub -Description "Internal Network"
