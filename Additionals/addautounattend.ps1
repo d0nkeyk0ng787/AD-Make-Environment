@@ -1,26 +1,36 @@
 # Create the autounattend iso
 
-. .\New-IsoFile.ps1
+. H:\MakeADEnv\Additionals\New-IsoFile.ps1
+. H:\MakeADEnv\config.ps1
 
-# VMs
-$VMs = @("DC1","DHCP","FSVR1")
+function New-UnattendISO{
+    
+    param(
+    [Parameter(Mandatory = $true)][string[]]$VMName,
+    [Parameter(Mandatory = $true)][string[]]$VMType
+    )
+    
+    # Variables
+    $Unattendxml = "$Installdir\Autounattend\$VMType\autounattend.xml"
+    $Unattendxml = "$Installdir\Autounattend\$VMType\autounattend.xml"
+    $Unattendiso = "$VMLocation\$VMName\autounattend.iso"
+    $VMPath = "$VMLocation\$VMName"
+    $UnattendPath = "$VMPath\Autounattend\autounattend.xml"
 
-# Variables
-$Unattendxml = "H:\MakeADEnv\Autounattend\autounattend.xml"
-$Unattendiso = "H:\VMs\$VM\autounattend.iso"
-$VMPath = "H:\VMs\$VM"
-$UnattendPath = "$VMPath\Autounattend\autounattned.xml"
+    Write-Host "Creating autounattend iso for $VMName" -ForegroundColor Cyan
 
-# Create an autounattend iso
-foreach($VM in $VMs){
     # Copy autounattend to VM folder
-    New-Item -ItemType Directory "$VMPath\Autounattend\"
+    New-Item -ItemType Directory "$VMPath\Autounattend\" | Out-Null
     Copy-Item -Path $Unattendxml -Destination "$VMPath\Autounattend\autounattend.xml"
 
     # Change computer name in the unattend file for each vm
-    $XML = Get-Content "$VMPath\Autounattend\autounattend.xml"
-    $XML.replace("SetNameHere", $VM) | Out-File $UnattendPath
-    
-    New-IsoFile -source $UnattendPath -destination $Unattendiso
-    Add-VMDvdDrive -VMName $VM -Path $Unattendiso
+    (Get-Content $UnattendPath).replace("SetNameHere", $VMName) | Set-Content $UnattendPath | Out-Null
+
+    New-IsoFile -source $UnattendPath -destination $Unattendiso | Out-Null
+    Add-VMDvdDrive -VMName $VMName -Path $Unattendiso
+    Write-Host "Autounattend iso file added to $VMName" -ForegroundColor Cyan
+
+    # Remove unattend folder
+    Remove-Item -Path "$VMPath\Autounattend\" -Recurse
+    Write-Host "Autounattend cleanup for $VMName completed" -ForegroundColor Cyan
 }

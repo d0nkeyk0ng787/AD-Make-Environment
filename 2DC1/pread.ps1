@@ -42,3 +42,5 @@ Import-Module ADDSDeployment | Out-Null
 
 # Install AD DS Forest
 Install-ADDSForest -DomainName $DomainName -SafeModeAdministratorPassword $password -InstallDNS:$true -Force:$true -WarningAction SilentlyContinue | Out-Null
+
+Write-Progress -Id 0 -Completed -Activity -1 | Out-Null

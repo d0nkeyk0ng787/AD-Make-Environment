@@ -2,37 +2,74 @@
 
 Import-Module H:\MakeADEnv\Additionals\New-IsoFile.ps1
 
-# Mount ISO
-Mount-DiskImage -ImagePath H:\ISO\SERVER_EVAL_x64FRE_en-us.iso | Out-Null
+function New-AutoISO{
+    
+    param(
+    [Parameter(Mandatory = $true)][string[]]$ISO,
+    [Parameter(Mandatory = $true)][string[]]$Type
+    )
 
-Write-Host "ISO image mounted" -ForegroundColor Cyan
+    # Auto ISO Path
+    $AutoPath = "H:\ISO\AutoISO\"
+    $SVRAutoISO = "H:\ISO\AutoISO\Server22-Auto.iso"
+    $CLIAutoISO = "H:\ISO\AutoISO\Client10-Auto.iso"
 
-# Path to mounted ISO file
-$Drive = Get-DiskImage -ImagePath H:\ISO\SERVER_EVAL_x64FRE_en-us.iso | Get-Volume | Select-Object DriveLetter
-$Drive = $Drive.DriveLetter + ":"
+    # Create AutoISO directory
+    if(Test-Path -Path $AutoPath){
+        Write-Host "Path already exists, continuing!" -ForegroundColor Cyan
+    }
+    else{
+        New-Item -Type Directory -Path $AutoPath | Out-Null
+    }
 
-# ISO Path
-$ISO = "H:\ISO\SERVER_EVAL_x64FRE_en-us.iso"
-# Auto ISO Path
-$AutoISO = "H:\ISO\AutoISO\Server22-Auto.iso"
+    # Create the server ISO
+    if($Type -eq "Server"){
+        if(Test-Path -Path $SVRAutoISO){
+            Write-Host "Auto iso already exists...continuing!" -ForegroundColor Black -BackgroundColor Yellow
+        }
+        else{
+            # Mount ISO
+            Mount-DiskImage -ImagePath $ISO | Out-Null
+            Write-Host "ISO image mounted" -ForegroundColor Cyan
 
-# Create directory for new ISO
-$AutoPath = "H:\ISO\AutoISO"
-if(Test-Path -Path $AutoPath){
-    Write-Host "Auto iso already exists...continuing!" -ForegroundColor Black -BackgroundColor Yellow
+            # Path to mounted ISO file
+            $Drive = Get-DiskImage -ImagePath $ISO | Get-Volume | Select-Object DriveLetter
+            $Drive = $Drive.DriveLetter + ":"
+
+            # Create auto iso
+            Write-Host "Creating Auto ISO..." -ForegroundColor Green
+            $DrivePath = $Drive + "\"
+            New-IsoFile -source $DrivePath -destinationiso $SVRAutoISO -bootfile "$Drive\efi\microsoft\boot\efisys_noprompt.bin" -title "Server22-Auto.iso" | Out-Null
+            Write-Host "Server Auto ISO created" -ForegroundColor Cyan
+
+            # Dismount the ISO
+            Dismount-DiskImage -ImagePath $ISO | Out-Null
+            Write-Host "ISO image dismounted" -ForegroundColor Cyan
+        }
+    }
+    # Create the client ISO
+    elseif($Type -eq "Client"){
+        if(Test-Path -Path $CLIAutoISO){
+            Write-Host "Auto iso already exists...continuing!" -ForegroundColor Black -BackgroundColor Yellow
+        }
+        else{
+            # Mount ISO
+            Mount-DiskImage -ImagePath $ISO | Out-Null
+            Write-Host "ISO image mounted" -ForegroundColor Cyan
+
+            # Path to mounted ISO file
+            $Drive = Get-DiskImage -ImagePath $ISO | Get-Volume | Select-Object DriveLetter
+            $Drive = $Drive.DriveLetter + ":"
+            
+            # Create auto iso
+            Write-Host "Creating Auto ISO..." -ForegroundColor Green
+            $DrivePath = $Drive + "\"
+            New-IsoFile -source $DrivePath -destinationiso $CLIAutoISO -bootfile "$Drive\efi\microsoft\boot\efisys_noprompt.bin" -title "Client10-Auto.iso" | Out-Null
+            Write-Host "Client Auto ISO created" -ForegroundColor Cyan
+
+            # Dismount the ISO
+            Dismount-DiskImage -ImagePath $ISO | Out-Null
+            Write-Host "ISO image dismounted" -ForegroundColor Cyan
+        }
+    }
 }
-else{
-    Write-Host "Creating Auto ISO..." -ForegroundColor Green
-    New-Item -Type Directory -Path $AutoPath | Out-Null
-
-    # Create auto iso
-    $DrivePath = $Drive + "\"
-    New-IsoFile -source $DrivePath -destinationiso $AutoISO -bootfile "$Drive\efi\microsoft\boot\efisys_noprompt.bin" -title "Server22-Auto.iso" | Out-Null
-
-    Write-Host "Auto ISO created" -ForegroundColor Cyan
-}
-
-# Dismount the ISO
-Dismount-DiskImage -ImagePath H:\ISO\SERVER_EVAL_x64FRE_en-us.iso | Out-Null
-
-Write-Host "ISO image dismounted" -ForegroundColor Cyan

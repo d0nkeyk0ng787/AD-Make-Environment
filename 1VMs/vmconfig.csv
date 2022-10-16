@@ -1,6 +1,6 @@
-VMName,Memory,Path,NewVHDPath,StorageSize,ISOPath
-DC1,2048,H:\VMs\,H:\VMs\,60,H:\ISO\AutoISO\Server22-Auto.iso
-CLI1,2048,H:\VMs\,H:\VMs\,60,H:\ISO\Win10_21H2_EnglishInternational_x64.iso
-DHCP,2048,H:\VMs\,H:\VMs\,60,H:\ISO\AutoISO\Server22-Auto.iso
-FSVR1,2048,H:\VMs\,H:\VMs\,60,H:\ISO\AutoISO\Server22-Auto.iso
-SVR1,2048,H:\VMs\,H:\VMs\,60,H:\ISO\AutoISO\Server22-Auto.iso
+VMName,Memory,Path,NewVHDPath,StorageSize,ISOPath,Type
+DC1,2048,H:\VMs\,H:\VMs\,60,H:\ISO\AutoISO\Server22-Auto.iso,Server
+CLI1,2048,H:\VMs\,H:\VMs\,60,H:\ISO\AutoISO\Client10-Auto.iso,Client
+DHCP,2048,H:\VMs\,H:\VMs\,60,H:\ISO\AutoISO\Server22-Auto.iso,Server
+FSVR1,2048,H:\VMs\,H:\VMs\,60,H:\ISO\AutoISO\Server22-Auto.iso,Server
+SVR1,2048,H:\VMs\,H:\VMs\,60,H:\ISO\AutoISO\Server22-Auto.iso,Server

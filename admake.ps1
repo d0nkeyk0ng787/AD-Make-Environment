@@ -2,20 +2,15 @@
 # Created 03 OCT 22 | Gnome787
 
 # Imports
-Import-Module H:\MakeADEnv\Additionals\New-IsoFile.ps1
+. H:\MakeADEnv\config.ps1
+. H:\MakeADEnv\Additionals\New-IsoFile.ps1
+. H:\MakeADEnv\Additionals\nokeyprompt.ps1
+. H:\MakeADEnv\Additionals\testconnectivity.ps1
+. H:\MakeADEnv\Additionals\testad.ps1
 
-
-# Create a credential object
-$Password = ConvertTo-SecureString "Password1" -AsPlainText -Force
-$Cred = New-Object System.Management.Automation.PSCredential ("Administrator", $Password) 
-
-# Create a domain credential object
-$Password = ConvertTo-SecureString "Password1" -AsPlainText -Force
-$DomainCred = New-Object System.Management.Automation.PSCredential ("xyz\Administrator", $Password) 
-
-# Create a client credential object
-$Password = ConvertTo-SecureString "Password1" -AsPlainText -Force
-$CliCred = New-Object System.Management.Automation.PSCredential ("Admin", $Password) 
+# Variables
+#$ServerISO = "H:\ISO\SERVER_EVAL_x64FRE_en-us.iso"
+#$ClientISO = "H:\ISO\Win10_21H2_EnglishInternational_x64.iso"
 
 # Functions
 
@@ -30,21 +25,9 @@ function Press-Any {
     $null = $Host.UI.RawUI.ReadKey('NoEcho,IncludeKeyDown')
 }
 
-# Wait for PS Remoting
-function Wait-ForPS {
-
-    param (
-        [Parameter(Mandatory = $true)] [string[]]$VMName,
-        [Parameter(Mandatory = $true)] $Creds
-    )
-
-    Write-Host "Waiting for" $VMName "to respond to PS remoting" -ForegroundColor Cyan
-    while ((icm -VMName $VMName -Credential $Creds {"Test"} -ea SilentlyContinue) -ne "Test") {Sleep -Seconds 1}
-    Write-Host $VMName "is responding to PS remoting...Continuing" -ForegroundColor Cyan 
-}
-
 # Create auto ISO
-H:\MakeADEnv\Additionals\nokeyprompt.ps1
+New-AutoISO -ISO $ServerISO -Type "Server"
+New-AutoISO -ISO $ClientISO -Type "Client"
 
 # Run the script that makes the VMs
 H:\MakeADEnv\1VMs\makevms.ps1
@@ -53,12 +36,11 @@ H:\MakeADEnv\1VMs\makevms.ps1
 Start-Sleep -Seconds 10
 
 # Start the DC
-#Start-VM -Name "DC1"
 Write-Host "DC1 is running" -ForegroundColor Black -BackgroundColor Green
 
 # Continue when Windows install has completed
 #Press-Any -CustomMessage "Complete Windows setup before continuing."
-Write-Host "Complete Windows install" -ForegroundColor Black -BackgroundColor Magenta
+Write-Host "Windows is being installed!" -ForegroundColor Black -BackgroundColor Magenta
 Wait-ForPS -VMName "DC1" -Creds $Cred
 
 Write-Host "`r`nPre AD setup is beginning" -ForegroundColor Cyan
@@ -67,21 +49,12 @@ Write-Host "`r`nPre AD setup is beginning" -ForegroundColor Cyan
 Invoke-Command -VMName "DC1" -FilePath H:\MakeADEnv\2DC1\pread.ps1 -Credential $Cred
 
 Write-Host "Finished installing AD DS Forest" -ForegroundColor Black -BackgroundColor Yellow
+# Install-ADDSForest
 
 # Sleep until the DC responds to PS remoting
 Wait-ForPS -VMName DC1 -Creds $DomainCred
-
-# Wait for ADWS to come online
-Invoke-Command -VMName DC1 -Credential $DomainCred -ScriptBlock {
-    Write-Verbose "Waiting for AD Web Services to be in a running state" -Verbose
-    $ADWebSvc = Get-Service ADWS | Select-Object *
-    while($ADWebSvc.Status -ne 'Running')
-            {
-            Start-Sleep -Seconds 1
-            $ADWebSvc = Get-Service ADWS | Select-Object *
-            }
-	Write-Host "ADWS is running" -ForegroundColor Black -BackgroundColor Green
-	}
+Test-Connectivity -VMName DC1 -Creds $DomainCred
+Get-ADReady -VMName DC1 -Creds $DomainCred
 
 # Setup the AD environment
 # Make OUs, security groups, and add users
@@ -95,7 +68,7 @@ Write-Host "DHCP server is running" -ForegroundColor Black -BackgroundColor Gree
 
 # Continue when Windows install has completed
 #Press-Any -CustomMessage "Complete Windows setup before continuing."
-Write-Host "Complete Windows install" -ForegroundColor Black -BackgroundColor Magenta
+Write-Host "Windows is being installed!" -ForegroundColor Black -BackgroundColor Magenta
 Wait-ForPS -VMName "DHCP" -Creds $Cred
 
 Write-Host "`r`nDHCP setup is beginning" -ForegroundColor Cyan
@@ -118,7 +91,7 @@ Write-Host "FSVR1 is running" -ForegroundColor Black -BackgroundColor Green
 
 # Continue when Windows install has completed
 #Press-Any -CustomMessage "Complete Windows setup before continuing."
-Write-Host "Complete Windows install" -ForegroundColor Black -BackgroundColor Magenta
+Write-Host "Windows is being installed!" -ForegroundColor Black -BackgroundColor Magenta
 Wait-ForPS -VMName "FSVR1" -Creds $Cred
 
 Write-Host "`r`nFSVR1 setup is beginning" -ForegroundColor Cyan
@@ -149,8 +122,8 @@ Write-Host "CLI1 is running" -ForegroundColor Black -BackgroundColor Green
 
 # Continue when Windows install has completed
 #Press-Any -CustomMessage "Complete Windows setup before continuing."
-Write-Host "Complete Windows install" -ForegroundColor Black -BackgroundColor Magenta
-Wait-ForPS -VMName "CLI1" -Creds $CliCred
+Write-Host "Windows is being installed!" -ForegroundColor Black -BackgroundColor Magenta
+Wait-ForPS -VMName "CLI1" -Creds $Cred
 
 Write-Host "`r`nCLI1 setup is beginning" -ForegroundColor Cyan
 
@@ -158,16 +131,10 @@ Write-Host "`r`nCLI1 setup is beginning" -ForegroundColor Cyan
 Start-Sleep -Seconds 10
 
 # Perform CLI1 setup. Create a PSSession and store it in a variable to get past Access is denied error with Invoke-Command
-$Session = New-PSSession -VMName "CLI1" -Credential $CliCred
+$Session = New-PSSession -VMName "CLI1" -Credential $Cred
 Invoke-Command -Session $Session -FilePath H:\MakeADEnv\5CLI1\installcli.ps1
-#Invoke-Command -VMName "CLI1" -FilePath H:\MakeADEnv\5CLI1\installcli.ps1 -Credential $CliCred
 
 Start-Sleep -Seconds 20
-
-# Rename the client
-#$Session = New-PSSession -VMName "CLI1" -Credential $DomainCred
-#Invoke-Command -Session $Session -ScriptBlock {Rename-Computer -NewName "CLI1" -Restart}
-#Invoke-Command -VMName "CLI1" -Credential $DomainCred -ScriptBlock {Rename-Computer -NewName "CLI1" -Restart} 
 
 Write-Host "CLI1 setup complete" -ForegroundColor Cyan
 
@@ -185,7 +152,7 @@ function Add-Users {
     Wait-ForPS -VMName "DC1" -Creds $DomainCred
 
     # Run the add users script on the DC
-    Invoke-Command -VMName "DC1" -Credential $DomainCred -FilePath H:\MakeADEnv\6Extras\addusers.ps1
+    Invoke-Command -VMName "DC1" -Credential $DomainCred -FilePath "$Installdir\6Extras\addusers.ps1"
 }
 
 function Add-Machine {

@@ -7,7 +7,6 @@ Write-Host "IPv6 Disabled" -ForegroundColor Cyan
 
 # Reusable Variables
 $DC = "192.168.100.2"
-$NewName = "SVR1"
 $OUPathh = "OU=Servers,OU=Devices,OU=XYZ,DC=xyz,DC=local"
 
 # Set the DNS
@@ -24,7 +23,6 @@ Write-Host "Joining machine to the domain" -ForegroundColor Cyan
 # Join computer to the domain
 $domainparams = @{
 	DomainName = "xyz.local"
-	NewName = $NewName
 	OUPath = $OUPathh
 	Credential = $DomainCred
 	Force = $true

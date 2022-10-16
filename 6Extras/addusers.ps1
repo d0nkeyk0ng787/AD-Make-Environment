@@ -1,11 +1,13 @@
 # Powershell script to create a virtual machine in Hyper-V
 # Created by Gnome787  | 21 SEP 22
 
+. H:\MakeADEnv\config.ps1
+
 # Import AD module
 Import-Module ActiveDirectory
 
 # Store csv file data in a variable $Users
-$Users = Import-Csv H:\MakeADEnv\6Extras\userconfig.csv -Delimiter ","
+$Users = Import-Csv $Installdir\6Extras\userconfig.csv -Delimiter ","
 
 # Iterate over each row in the csv file and assign the data to variables
 foreach ($User in $Users) {
