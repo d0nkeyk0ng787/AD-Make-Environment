@@ -3,7 +3,7 @@
 # DNS
 
 # Add a DNS forwarded
-Set-DnsServerForwarder -IPAddress "1.1.1.1" | Out-Null
+Set-DnsServerForwarder -IPAddress $using:DNSForwarder | Out-Null
 
 # OUs
 
@@ -53,7 +53,7 @@ $Params = @{
     Surname = "Smith"
     DisplayName = "Smith, John"
     Path = "OU=Employees,OU=Users,OU=XYZ,DC=xyz,DC=local"
-    AccountPassword = (ConvertTo-SecureString "Password1" -AsPlainText -Force)
+    AccountPassword = $using:Password
     Enabled = $true
     ChangePasswordAtLogon = $true
 }

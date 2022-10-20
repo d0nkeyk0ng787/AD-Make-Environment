@@ -1,7 +1,5 @@
 # Test if AD has finished on the DC and it is ready to join the client systems
 
-. H:\MakeADEnv\config.ps1
-
 function Get-ADReady{
     param(
     [parameter(Mandatory=$true)][string[]]$VMName,
@@ -9,8 +7,10 @@ function Get-ADReady{
     )
 
     Write-Host "Trying to retrieve the AD Object!..." -ForegroundColor Black -BackgroundColor Magenta
-    $ADObj = Invoke-Command -VMName $DC1 -Credential $DomainCred -ScriptBlock{(Get-ADObject -Filter 'Name -like "xyz"').Name}
-    while($ADObj -ne "$DomainName"){Start-Sleep 2}
+    #$ADObj = Invoke-Command -VMName $DC1 -Credential $Creds -ScriptBlock{Get-ADObject -Filter * -ea SilentlyContinue}
+    #while($ADObj -ne $NetBIOSName){Start-Sleep 5}
+    while((Invoke-Command -VMName $DC1 -Credential $Creds -ScriptBlock{Get-ADObject -Filter * -ErrorAction SilentlyContinue}) -eq $null){Start-Sleep 5}
+    #while($ADObj -eq $null){Start-Sleep 5}
     Write-Host "AD object retrieved...Continuing!" -ForegroundColor Black -BackgroundColor Green
 
 }

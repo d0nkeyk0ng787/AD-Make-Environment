@@ -1,18 +1,5 @@
 # Setup DHCP environment
 
-# Variables
-$Scope = "Internal"
-$Net = "192.168.100.0"
-$Gateway = "192.168.100.1"
-$DC = "192.168.100.2"
-$Start = "192.168.100.50"
-$End = "192.168.100.254"
-$Sub = "255.255.255.0"
-$Domain = "xyz.local"
-$ExStart = "192.168.100.1"
-$ExEnd = "192.168.100.49"
-$Hostname = "dhcp.xyz.local"
-
 # Install DHCP
 Install-WindowsFeature DHCP -IncludeManagementTools | Out-Null
 
@@ -29,7 +16,7 @@ Write-Host "DHCP service is restarting..." -ForegroundColor Black -BackgroundCol
 Start-Sleep -Seconds 5
 
 # Add the DHCP server to the list of authorised DHCP servers in AD
-Add-DhcpServerInDC -Dnsname $Hostname | Out-Null
+Add-DhcpServerInDC -Dnsname $using:DHCPHostname | Out-Null
 
 Write-Host "DHCP server has been authorised in the DC" -ForegroundColor Cyan
 
@@ -37,13 +24,13 @@ Write-Host "DHCP server has been authorised in the DC" -ForegroundColor Cyan
 Set-ItemProperty –Path registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\ServerManager\Roles\12 –Name ConfigurationState –Value 2 | Out-Null
 
 # Create internal scope
-Add-DhcpServerv4Scope -Name $Scope -StartRange $Start -EndRange $End -SubnetMask $Sub -Description "Internal Network"
+Add-DhcpServerv4Scope -Name $using:ScopeName -StartRange $using:Start -EndRange $using:End -SubnetMask $using:Sub -Description "Internal Network"
 
 # Globally define the DNSServer IP, Domain and the default router.
-Set-DhcpServerv4OptionValue -DNSServer $DC -DNSDomain $Domain -Router $Gateway
+Set-DhcpServerv4OptionValue -DNSServer $using:DC1IP -DNSDomain $using:DomainName -Router $using:Gateway
 
 # Create an Exclusion range on the scope
-Add-Dhcpserverv4ExclusionRange -ScopeId $Net -StartRange $ExStart -EndRange $ExEnd
+Add-Dhcpserverv4ExclusionRange -ScopeId $using:Net -StartRange $using:ExcludeStart -EndRange $using:ExcludeEnd
 
 # Complete message
 Write-Host "Internal scope configured." -ForegroundColor Cyan

@@ -1,7 +1,7 @@
 # Create the autounattend iso
 
-. H:\MakeADEnv\Additionals\New-IsoFile.ps1
-. H:\MakeADEnv\config.ps1
+. .\Additionals\New-IsoFile.ps1
+. .\config.ps1
 
 function New-UnattendISO{
     
@@ -13,9 +13,9 @@ function New-UnattendISO{
     # Variables
     $Unattendxml = "$Installdir\Autounattend\$VMType\autounattend.xml"
     $Unattendxml = "$Installdir\Autounattend\$VMType\autounattend.xml"
-    $Unattendiso = "$VMLocation\$VMName\autounattend.iso"
-    $VMPath = "$VMLocation\$VMName"
-    $UnattendPath = "$VMPath\Autounattend\autounattend.xml"
+    $Unattendiso = $VMLocation+"\"+$VMName+"\autounattend.iso"
+    $VMPath = $VMLocation+"\"+$VMName
+    $UnattendPath = $VMPath+"\Autounattend\autounattend.xml"
 
     Write-Host "Creating autounattend iso for $VMName" -ForegroundColor Cyan
 

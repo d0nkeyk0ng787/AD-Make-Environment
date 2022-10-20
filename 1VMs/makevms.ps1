@@ -1,8 +1,7 @@
 # Powershell script to create a virtual machine in Hyper-V
 # Created by Gnome787  | 22 SEP 22
 
-# Import
-. H:\MakeADEnv\Additionals\addautounattend.ps1
+. .\Additionals\addautounattend.ps1
 
 # 1 MB in B (Binary)
 $1BM = 1048576
@@ -10,7 +9,7 @@ $1BM = 1048576
 $1BG = 1073741824
 
 # Store csv file in a variable
-$VMs = Import-Csv H:\MakeADEnv\1VMs\vmconfig.csv -Delimiter ","
+$VMs = Import-Csv .\1VMs\vmconfig.csv -Delimiter ","
 
 # Iterate over each row in the csv file and assign the data to variables
 foreach($VM in $VMs){

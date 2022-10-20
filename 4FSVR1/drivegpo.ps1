@@ -4,19 +4,19 @@
 $gpoOuObj=new-gpo -name "UserHomeDriveMap"
 
 #Link GPO to domain
-new-gplink -Guid $gpoOuObj.Id.Guid -target "DC=xyz,DC=local" | Out-Null
+new-gplink -Guid $gpoOuObj.Id.Guid -target "DC=$using:NetBIOSName,DC=$using:TLD" | Out-Null
 
 #Get GUID and make it upper case
 $guid = $gpoOuObj.Id.Guid.ToUpper()
 
 #Create a folder that the GP MMC snap-in normally would
-$path="\\xyz.local\SYSVOL\xyz.local\Policies\{$guid}\User\Preferences\Drives"
+$path="\\$using:DomainName\SYSVOL\$using:DomainName\Policies\{$guid}\User\Preferences\Drives"
 New-Item -Path $path -type Directory | Out-Null
 
 #Variables that would normally be set in the Drive Mapping dialog box
 $Letter = "L"
 $Label = "%username% Home"
-$SharePath = "\\xyz.local\EmployeeHomes"
+$SharePath = "\\$using:DomainName\EmployeeHomes"
 $ILT = "XYZ\Staff"
 $SID = (Get-ADGroup "Staff").SID.Value
 

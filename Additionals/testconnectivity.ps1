@@ -9,7 +9,7 @@ function Wait-ForPS {
     )
 
     Write-Host "Waiting for" $VMName "to respond to PS remoting" -ForegroundColor Cyan
-    while ((icm -VMName $VMName -Credential $Creds {"Test"} -ea SilentlyContinue) -ne "Test") {Sleep -Seconds 1}
+    while ((icm -VMName $VMName -Credential $Creds {"Test"} -ea SilentlyContinue) -ne "Test") {Sleep -Seconds 5}
     Write-Host $VMName "is responding to PS remoting...Continuing" -ForegroundColor Cyan 
 }
 
@@ -22,6 +22,6 @@ function Test-Connectivity{
     )
 
     Write-Host "Waiting on LogonUI..." -ForegroundColor Black -BackgroundColor Magenta
-    while((Invoke-Command -VMName $VMName -Credential $Creds -ScriptBlock {Get-Process "LogonUI" -ea SilentlyContinue}) -ne $null){Start-Sleep 2}
+    while((Invoke-Command -VMName $VMName -Credential $Creds -ScriptBlock {Get-Process "LogonUI" -ea SilentlyContinue}) -ne $null){Start-Sleep 5}
     Write-Host "LogonUI is down...Continuing!" -ForegroundColor Black -BackgroundColor Green
 }

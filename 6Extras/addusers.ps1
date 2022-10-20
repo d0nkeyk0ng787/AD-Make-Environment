@@ -7,7 +7,7 @@
 Import-Module ActiveDirectory
 
 # Store csv file data in a variable $Users
-$Users = Import-Csv $Installdir\6Extras\userconfig.csv -Delimiter ","
+$Users = Import-Csv .\6Extras\userconfig.csv -Delimiter ","
 
 # Iterate over each row in the csv file and assign the data to variables
 foreach ($User in $Users) {

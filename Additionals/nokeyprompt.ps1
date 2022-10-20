@@ -1,6 +1,6 @@
 # Modify the ISO so it doesn't require a key prompt
 
-Import-Module H:\MakeADEnv\Additionals\New-IsoFile.ps1
+. .\Additionals\New-IsoFile.ps1
 
 function New-AutoISO{
     
@@ -10,9 +10,9 @@ function New-AutoISO{
     )
 
     # Auto ISO Path
-    $AutoPath = "H:\ISO\AutoISO\"
-    $SVRAutoISO = "H:\ISO\AutoISO\Server22-Auto.iso"
-    $CLIAutoISO = "H:\ISO\AutoISO\Client10-Auto.iso"
+    $AutoPath = "$ISOPath\AutoISO\"
+    $SVRAutoISO = "$ISOPath\AutoISO\Server22-Auto.iso"
+    $CLIAutoISO = "$ISOPath\AutoISO\Client10-Auto.iso"
 
     # Create AutoISO directory
     if(Test-Path -Path $AutoPath){

@@ -36,6 +36,6 @@ Write-Host "SMB share EmployeeHomes created on the S drive." -ForegroundColor Cy
 Install-WindowsFeature FS-DFS-Namespace -IncludeManagementTools | Out-Null
 
 # Create DFS namespace
-New-DfsnRoot -Path "\\xyz.local\EmployeeHomes" -Type DomainV2 -TargetPath "\\fsvr1.xyz.local\EmployeeHomes" | Out-Null
+New-DfsnRoot -Path "\\$using:DomainName\EmployeeHomes" -Type DomainV2 -TargetPath "\\fsvr1.$using:DomainName\EmployeeHomes" | Out-Null
 
 Write-Host "DFS configured and setup for EmployeeHomes. Implementing drive mapping." -ForegroundColor Cyan
