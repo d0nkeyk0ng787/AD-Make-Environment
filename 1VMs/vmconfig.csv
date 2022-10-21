@@ -1,6 +1,6 @@
 VMName,Memory,Path,NewVHDPath,StorageSize,ISOPath,Type
-DC1,2048,H:\VMs\,H:\VMs\,60,H:\ISO\AutoISO\Server22-Auto.iso,Server
-CLI1,2048,H:\VMs\,H:\VMs\,60,H:\ISO\AutoISO\Client10-Auto.iso,Client
-DHCP,2048,H:\VMs\,H:\VMs\,60,H:\ISO\AutoISO\Server22-Auto.iso,Server
-FSVR1,2048,H:\VMs\,H:\VMs\,60,H:\ISO\AutoISO\Server22-Auto.iso,Server
-SVR1,2048,H:\VMs\,H:\VMs\,60,H:\ISO\AutoISO\Server22-Auto.iso,Server
+DC1,2048,E:\VMs\,E:\VMs\,60,E:\MakeADEnv\ISO\AutoISO\Server22-Auto.iso,Server
+CLI1,2048,E:\VMs\,E:\VMs\,60,E:\MakeADEnv\ISO\AutoISO\Client10-Auto.iso,Client
+DHCP,2048,E:\VMs\,E:\VMs\,60,E:\MakeADEnv\ISO\AutoISO\Server22-Auto.iso,Server
+FSVR1,2048,E:\VMs\,E:\VMs\,60,E:\MakeADEnv\ISO\AutoISO\Server22-Auto.iso,Server
+SVR1,2048,E:\VMs\,E:\VMs\,60,E:\MakeADEnv\ISO\AutoISO\Server22-Auto.iso,Server

@@ -7,10 +7,13 @@ for this program to work.
 
 # Install paths
 $Installdir = Get-Location
-$VMLocation = "H:\VMs"
-$ISOPath = "H:\ISO"
-$ServerISO = "$ISOPathSERVER_EVAL_x64FRE_en-us.iso"
-$ClientISO = "$ISOPathWindows.iso"
+$VMLocation = "E:\VMs"
+$ISOPath = "E:\MakeADEnv\ISO"
+$ServerISO = "$ISOPath\SERVER_EVAL_x64FRE_en-us.iso"
+$ClientISO = "$ISOPath\Windows.iso"
+
+# Adapter Name
+$AdapterName = "Default Switch"
 
 # Virtual Machines
 $DC1 = "DC1"

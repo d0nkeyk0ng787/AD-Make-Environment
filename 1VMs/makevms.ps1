@@ -40,7 +40,7 @@ foreach($VM in $VMs){
             NewVHDSizeBytes = $Storagesize
             BootDevice = "VHD"
             Path = $Path
-            SwitchName = "NATSwitch"
+            SwitchName = $AdapterName
         }
 
         # Create the VM.

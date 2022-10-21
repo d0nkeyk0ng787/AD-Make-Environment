@@ -25,51 +25,51 @@ function New-AutoISO{
     # Create the server ISO
     if($Type -eq "Server"){
         if(Test-Path -Path $SVRAutoISO){
-            Write-Host "Auto iso already exists...continuing!" -ForegroundColor Black -BackgroundColor Yellow
+            Write-Host "Server Auto iso already exists...continuing!" -ForegroundColor Black -BackgroundColor Yellow
         }
         else{
             # Mount ISO
             Mount-DiskImage -ImagePath $ISO | Out-Null
-            Write-Host "ISO image mounted" -ForegroundColor Cyan
+            Write-Host "Server ISO image mounted" -ForegroundColor Cyan
 
             # Path to mounted ISO file
             $Drive = Get-DiskImage -ImagePath $ISO | Get-Volume | Select-Object DriveLetter
             $Drive = $Drive.DriveLetter + ":"
 
             # Create auto iso
-            Write-Host "Creating Auto ISO..." -ForegroundColor Green
+            Write-Host "Creating Server Auto ISO..." -ForegroundColor Green
             $DrivePath = $Drive + "\"
             New-IsoFile -source $DrivePath -destinationiso $SVRAutoISO -bootfile "$Drive\efi\microsoft\boot\efisys_noprompt.bin" -title "Server22-Auto.iso" | Out-Null
             Write-Host "Server Auto ISO created" -ForegroundColor Cyan
 
             # Dismount the ISO
             Dismount-DiskImage -ImagePath $ISO | Out-Null
-            Write-Host "ISO image dismounted" -ForegroundColor Cyan
+            Write-Host "Serevr ISO image dismounted" -ForegroundColor Cyan
         }
     }
     # Create the client ISO
     elseif($Type -eq "Client"){
         if(Test-Path -Path $CLIAutoISO){
-            Write-Host "Auto iso already exists...continuing!" -ForegroundColor Black -BackgroundColor Yellow
+            Write-Host "Client Auto iso already exists...continuing!" -ForegroundColor Black -BackgroundColor Yellow
         }
         else{
             # Mount ISO
             Mount-DiskImage -ImagePath $ISO | Out-Null
-            Write-Host "ISO image mounted" -ForegroundColor Cyan
+            Write-Host "Client ISO image mounted" -ForegroundColor Cyan
 
             # Path to mounted ISO file
             $Drive = Get-DiskImage -ImagePath $ISO | Get-Volume | Select-Object DriveLetter
             $Drive = $Drive.DriveLetter + ":"
             
             # Create auto iso
-            Write-Host "Creating Auto ISO..." -ForegroundColor Green
+            Write-Host "Client Creating Auto ISO..." -ForegroundColor Green
             $DrivePath = $Drive + "\"
             New-IsoFile -source $DrivePath -destinationiso $CLIAutoISO -bootfile "$Drive\efi\microsoft\boot\efisys_noprompt.bin" -title "Client10-Auto.iso" | Out-Null
             Write-Host "Client Auto ISO created" -ForegroundColor Cyan
 
             # Dismount the ISO
             Dismount-DiskImage -ImagePath $ISO | Out-Null
-            Write-Host "ISO image dismounted" -ForegroundColor Cyan
+            Write-Host "Client ISO image dismounted" -ForegroundColor Cyan
         }
     }
 }
