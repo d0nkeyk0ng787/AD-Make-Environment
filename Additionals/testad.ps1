@@ -15,7 +15,6 @@ function Get-ADReady{
     for ($i=0;$i -le 5; $i++) {
         if($script:invokecounter -eq 60){
             if((Invoke-Command -VMName $VMName -Credential $Creds -ScriptBlock{Get-ADObject -Filter * -ErrorAction SilentlyContinue}) -eq $null){
-                continue
             }
             else{
                 Write-Host "`r`nAD object retrieved...Continuing!" -ForegroundColor Black -BackgroundColor Magenta
@@ -25,7 +24,7 @@ function Get-ADReady{
         if($i -eq 4){
             $i = 0
         }
-        if($script:counter -eq 20){
+        if($script:counter -eq 10){
             $script:counter = 0
             $script:mult++
         }
