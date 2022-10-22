@@ -33,6 +33,5 @@ Currently the Organisational Units are created inside the adenv.ps1 file. These 
 
 * [ ] Implement an additional DC
 * [ ] Add the ability to install Windows on as many systems as specified
-* [ ] Add OU template to the config file
 * [ ] Add some features to make it a little less resource intensive
 * [ ] Add the wallpaper gpo

@@ -16,19 +16,20 @@ function Get-ADReady{
     for ($i=0;$i -le 5; $i++) {
         if((Get-Job -Name getADObject).State -eq  "Completed"){
             Write-Host "`r`nAD object retrieved...Continuing!" -ForegroundColor Black -BackgroundColor Magenta
-            Remove-Job -Name "getADObject"
             break
         }
-        if($i -eq 4){
-            $i = 0
+        else{
+            if($i -eq 4){
+                $i = 0
+            }
+            if($script:counter -eq 10){
+                $script:counter = 0
+                $script:mult++
+            }
+            $progress = $chars[$i] * $mult
+            Write-Host -NoNewLine "`r$progress" -ForegroundColor Green -BackgroundColor Black
+            $script:counter++
+            Start-Sleep -Milliseconds 150
         }
-        if($script:counter -eq 10){
-            $script:counter = 0
-            $script:mult++
-        }
-        $progress = $chars[$i] * $mult
-        Write-Host -NoNewLine "`r$progress" -ForegroundColor Green -BackgroundColor Black
-        $script:counter++
-        Start-Sleep -Milliseconds 150
     }
 }

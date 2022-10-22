@@ -9,6 +9,7 @@
 . .\Additionals\testad.ps1
 . .\Additionals\pressanykey.ps1
 . .\Additionals\addautounattend.ps1
+. .\getadobject.ps1
 
 <#
 ###################################################
@@ -38,13 +39,14 @@ Write-Host "`r`nPre AD setup is beginning" -ForegroundColor Cyan
 Invoke-Command -VMName $DC1 -FilePath .\2DC1\pread.ps1 -Credential $Cred
 Write-Host "Finished installing AD DS Forest" -ForegroundColor Black -BackgroundColor Yellow
 # Install-ADDSForest
-$ProgressPreference = 'SilentlyContinue'
 # Sleep until the DC responds to PS remoting
 Wait-ForPS -VMName $DC1 -Creds $DomainCred
 #Test-Connectivity -VMName DC1 -Creds $DomainCred
 Start-Sleep -Seconds 60
+#Get-ADReady -VMName $DC1 -Creds $DomainCred
 Get-ADReady -VMName $DC1 -Creds $DomainCred
-$ProgressPreference = 'Continue'
+Start-Sleep 5
+Remove-Job -Name "getADObject"
 # Setup the AD environment
 # Make OUs, security groups, and add users
 Invoke-Command -VMName $DC1 -FilePath .\2DC1\adenv.ps1 -Credential $DomainCred

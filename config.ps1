@@ -53,3 +53,15 @@ $Sub = "255.255.255.0"
 $ExcludeStart = "192.168.100.1"
 $ExcludeEnd = "192.168.100.49"
 $DHCPHostname = "dhcp.xyz.local"
+
+# OUs - For additional OUs, simply replicate an exisitng PSCustomObject on a new line and adjust as needed
+$BaseOU = [PSCustomObject]@{Name = "XYZ"; Path = "DC=xyz,DC=local"}
+$Devices = [PSCustomObject]@{Name = "Devices"; Path = "OU=XYZ,DC=xyz,DC=local"}
+$Servers = [PSCustomObject]@{Name = "Servers"; Path = "OU=Devices,OU=XYZ,DC=xyz,DC=local"}
+$Workstations = [PSCustomObject]@{Name = "Workstations"; Path = "OU=Devices,OU=XYZ,DC=xyz,DC=local"}
+$Users = [PSCustomObject]@{Name = "Users"; Path = "OU=XYZ,DC=xyz,DC=local"}
+$Admins = [PSCustomObject]@{Name = "Admins"; Path = "OU=Users,OU=XYZ,DC=xyz,DC=local"}
+$Employees = [PSCustomObject]@{Name = "Employees"; Path = "OU=Users,OU=XYZ,DC=xyz,DC=local"}
+$Groups = [PSCustomObject]@{Name = "Groups"; Path = "OU=XYZ,DC=xyz,DC=local"}
+$SecurityGroups = [PSCustomObject]@{Name = "SecurityGroups"; Path = "OU=Groups,OU=XYZ,DC=xyz,DC=local"}
+$DistributionLists = [PSCustomObject]@{Name = "DistributionLists"; Path = "OU=Groups,OU=XYZ,DC=xyz,DC=local"}
