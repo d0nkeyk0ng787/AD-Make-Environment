@@ -14,7 +14,7 @@ function Get-ADReady{
     Start-Job -Name "getADObject" -ScriptBlock {while((Invoke-Command -VMName $VMName -Credential $Creds -ScriptBlock{Get-ADObject -Filter * -ErrorAction SilentlyContinue}) -eq $null){Start-Sleep 5}} | Out-Null
 
     for ($i=0;$i -le 5; $i++) {
-        if((Get-Process -Name "getADObject" -ErrorAction SilentlyContinue) -eq $null){
+        if((Get-Process -Name "getADObject" -ErrorAction SilentlyContinue) -ne $null){
             Write-Host "`r`nAD object retrieved...Continuing!" -ForegroundColor Black -BackgroundColor Magenta
             break
         }
