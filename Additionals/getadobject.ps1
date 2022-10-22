@@ -11,11 +11,12 @@ function Get-ADReady{
     [parameter(Mandatory=$true)]$Creds
     )
     Write-Host "Trying to retrieve the AD Object!..." -ForegroundColor Green -BackgroundColor Black
-    Start-Job -Name "getADObject" -ScriptBlock {while((Invoke-Command -VMName $VMName -Credential $Creds -ScriptBlock{Get-ADObject -Filter * -ErrorAction SilentlyContinue}) -eq $null){Start-Sleep 5}} | Out-Null
+    Start-Job -Name "getADObject" -ScriptBlock {while((Invoke-Command -VMName $using:VMName -Credential $using:Creds -ScriptBlock{Get-ADObject -Filter * -ErrorAction SilentlyContinue}) -eq $null){Start-Sleep 5}} | Out-Null
 
     for ($i=0;$i -le 5; $i++) {
-        if((Get-Process -Name "getADObject" -ErrorAction SilentlyContinue) -ne $null){
+        if((Get-Job -Name getADObject).State -eq  "Completed"){
             Write-Host "`r`nAD object retrieved...Continuing!" -ForegroundColor Black -BackgroundColor Magenta
+            Remove-Job -Name "getADObject"
             break
         }
         if($i -eq 4){
