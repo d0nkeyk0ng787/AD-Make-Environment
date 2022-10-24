@@ -9,7 +9,7 @@
 . .\Additionals\testad.ps1
 . .\Additionals\pressanykey.ps1
 . .\Additionals\addautounattend.ps1
-. .\getadobject.ps1
+. .\Additionals\getadobject.ps1
 
 <#
 ###################################################

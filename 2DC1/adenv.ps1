@@ -5,25 +5,13 @@
 # Add a DNS forwarded
 Set-DnsServerForwarder -IPAddress $using:DNSForwarder | Out-Null
 
-# OUs
-
-# Create your main OU
-New-ADOrganizationalUnit -Name $using:BaseOU.Name -Path $using:BaseOU.Path 
-# Devices
-New-ADOrganizationalUnit -Name $using:Devices.Name -Path $using:Devices.Path
-New-ADOrganizationalUnit -Name $using:Servers.Name -Path $using:Servers.Path
-New-ADOrganizationalUnit -Name $using:Workstations.Name -Path $using:Workstations.Path
-# Users
-New-ADOrganizationalUnit -Name $using:Users.Name -Path $using:Users.Path
-New-ADOrganizationalUnit -Name $using:Admins.Name -Path $using:Admins.Path
-New-ADOrganizationalUnit -Name $using:Employees.Name -Path $using:Employees.Path
-# Groups
-New-ADOrganizationalUnit -Name $using:Groups.Name -Path $using:Groups.Path
-New-ADOrganizationalUnit -Name $using:SecurityGroups.Name -Path $using:SecurityGroups.Path
-New-ADOrganizationalUnit -Name $using:DistributionLists.Name -Path $using:DistributionLists.Path
+# Create OU
+foreach($OU in $using:OUs){
+    New-ADOrganizationalUnit -Name $OU.Name -Path $OU.Path
+}
 
 # Completed message
-Write-Host "XYZ OUs have been added...Continuing." -ForegroundColor Cyan
+Write-Host "$using:NetBIOSName OUs have been added...Continuing." -ForegroundColor Cyan
 
 # Security Groups
 

@@ -65,3 +65,5 @@ $Employees = [PSCustomObject]@{Name = "Employees"; Path = "OU=Users,OU=XYZ,DC=xy
 $Groups = [PSCustomObject]@{Name = "Groups"; Path = "OU=XYZ,DC=xyz,DC=local"}
 $SecurityGroups = [PSCustomObject]@{Name = "SecurityGroups"; Path = "OU=Groups,OU=XYZ,DC=xyz,DC=local"}
 $DistributionLists = [PSCustomObject]@{Name = "DistributionLists"; Path = "OU=Groups,OU=XYZ,DC=xyz,DC=local"}
+
+$OUs = @($BaseOU,$Devices,$Servers,$Workstations,$Users,$Admins,$Employees,$Groups,$SecurityGroups,$DistributionLists)
