@@ -8,19 +8,19 @@ Set-DnsServerForwarder -IPAddress $using:DNSForwarder | Out-Null
 # OUs
 
 # Create your main OU
-New-ADOrganizationalUnit -Name $BaseOU.Name -Path $BaseOU.Path 
+New-ADOrganizationalUnit -Name $using:BaseOU.Name -Path $using:BaseOU.Path 
 # Devices
-New-ADOrganizationalUnit -Name $Devices.Name -Path $Devices.Path
-New-ADOrganizationalUnit -Name $Servers.Name -Path $Servers.Path
-New-ADOrganizationalUnit -Name $Workstations.Name -Path $Workstations.Path
+New-ADOrganizationalUnit -Name $using:Devices.Name -Path $using:Devices.Path
+New-ADOrganizationalUnit -Name $using:Servers.Name -Path $using:Servers.Path
+New-ADOrganizationalUnit -Name $using:Workstations.Name -Path $using:Workstations.Path
 # Users
-New-ADOrganizationalUnit -Name $Users.Name -Path $Users.Path
-New-ADOrganizationalUnit -Name $Admins.Name -Path $Admins.Path
-New-ADOrganizationalUnit -Name $Employees.Name -Path $Employees.Path
+New-ADOrganizationalUnit -Name $using:Users.Name -Path $using:Users.Path
+New-ADOrganizationalUnit -Name $using:Admins.Name -Path $using:Admins.Path
+New-ADOrganizationalUnit -Name $using:Employees.Name -Path $using:Employees.Path
 # Groups
-New-ADOrganizationalUnit -Name $Groups.Name -Path $Groups.Path
-New-ADOrganizationalUnit -Name $SecurityGroups.Name -Path $SecurityGroups.Path
-New-ADOrganizationalUnit -Name $DistributionLists.Name -Path $DistributionLists.Path
+New-ADOrganizationalUnit -Name $using:Groups.Name -Path $using:Groups.Path
+New-ADOrganizationalUnit -Name $using:SecurityGroups.Name -Path $using:SecurityGroups.Path
+New-ADOrganizationalUnit -Name $using:DistributionLists.Name -Path $using:DistributionLists.Path
 
 # Completed message
 Write-Host "XYZ OUs have been added...Continuing." -ForegroundColor Cyan
