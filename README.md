@@ -4,6 +4,8 @@
 
 ### About
 
+![GitHub](https://img.shields.io/github/license/d0nkeyk0ng787/AD-Make-Environment) ![PowerShell](https://img.shields.io/badge/PowerShell-%235391FE.svg?style=for-the-badge&logo=powershell&logoColor=white)
+
 This script is designed to create an Active Directory environment with very little pre-configuration and essentially zero interaction. 
 
 This script uses a few functions from other developers. Namely the NewISO function updated by Alisatir McNair and originally developed by Chris Wu.
