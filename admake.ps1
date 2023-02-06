@@ -6,8 +6,6 @@
 . .\Additionals\New-IsoFile.ps1
 . .\Additionals\nokeyprompt.ps1
 . .\Additionals\testconnectivity.ps1
-. .\Additionals\testad.ps1
-. .\Additionals\pressanykey.ps1
 . .\Additionals\addautounattend.ps1
 . .\Additionals\getadobject.ps1
 
